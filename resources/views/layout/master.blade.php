@@ -55,13 +55,14 @@
 						@elseif(auth()->user()->role == 'kaprodi')
 						<li><a href="/" class="@yield('home')"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/kaprodi/list_dosen" class="@yield('dosen')"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
+						<li><a href="/kaprodi/profil" class="@yield('profil')"><i class="lnr lnr-code"></i> <span>Profil</span></a></li>
 						@elseif(auth()->user()->role == 'admin')
 						<li><a href="/" class="@yield('home')"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/admin/list_dosen" class="@yield('dosen')"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
 						@elseif(auth()->user()->role == 'inqa')
 						<li><a href="/" class="@yield('home')"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
-						<!-- <li><a href="/inqa/list_dosen" class="@yield('dosen')"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li> -->
-						<!-- <li><a href="/admin/listdosen" class="@yield('dosen')"><i class="lnr lnr-chart-bars"></i> <span>Dosen</span></a></li> -->
+						<!-- <li><a href="/inqa/list_dosen" class="@yield('dosen')"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
+						<li><a href="/admin/listdosen" class="@yield('dosen')"><i class="lnr lnr-chart-bars"></i> <span>Dosen</span></a></li> -->
 						<!-- <li><a href="panels.html" class=""><i class="lnr lnr-cog"></i> <span>Panels</span></a></li>
 						<li><a href="notifications.html" class=""><i class="lnr lnr-alarm"></i> <span>Notifications</span></a></li>
 						<li>

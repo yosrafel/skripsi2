@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Kelas extends Model
 {
     protected $table="kelas";
-    protected $fillable = ["nama_matakuliah, grup, sifat, sks, jumlah_mhs, prodi, tahun_ajaran, semester, created_at, updated_at"];
+    protected $fillable = ["nama_matakuliah, grup, sifat, sks, jumlah_mhs, prodi, tahun_ajaran, semester"];
+    public $timestamps = false;
 
     public function dosen(){
-        return $this->belongsToMany(Dosen::class)->withPivot('bkd_inqa', 'bkd_kelas');
+        return $this->belongsToMany(Dosen::class)->withPivot('bkd_inqa', 'bkd_kelas', 'verifikasi')->withTimeStamps();
+    }
+    public function dosenKelas(){
+        return $this->hasMany(DosenKelas::class);
     }
 
     public function matakuliah(){

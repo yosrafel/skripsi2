@@ -2,6 +2,15 @@
 @section('title', 'Profile Dosen')
 @section('dosen', 'active')
 @section('content')
+@if (session('status'))
+  <div class="text-center alert alert-success">
+    {{ session('status') }}
+  </div>
+@elseif(session('error'))
+  <div class="text-center alert alert-danger">
+    {{ session('error') }}
+  </div>
+@endif
 <div class="container float-left mb-5">
   <a class=" container " href="/admin/list_dosen"> < Kembali</a>
 </div>
@@ -53,20 +62,7 @@
 <div class="panel panel-headline col-md-12">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
-    <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
+    <hr> 
   </div>
 
   <div class="container">
@@ -86,7 +82,6 @@
           <th>SIFAT</th>
           <th>SKS</th>
           <th>TAHUN AJARAN</th>
-          <th>JUMLAH DOSEN</th>
           <th>BKD</th>
           <th>ACTION </th>
         </tr>
@@ -102,10 +97,9 @@
               <td>{{ $kelas->sifat}}</td>
               <td>{{ $kelas->sks}}</td>
               <td>{{ $kelas->tahun_ajaran}} - {{$kelas->semester}}</td>
-              <td>{{ $kelas->jumlah_dosen}}</td>
               <td>{{ number_format($kelas->bkd(), 2)}}</td>
               <td>
-                  <a href="/admin/{{$kelas->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/admin/{{$dosen->id}}/{{$kelas->id}}/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
               </tr>
           @endforeach
@@ -119,19 +113,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
   </div>
 
   <div class="container">
@@ -147,9 +128,9 @@
         <tr>
             <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>BKD</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -160,12 +141,12 @@
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
               <td>{{ $pekerjaan->jenis_pekerjaan}}</th>
-              <td>{{ $pekerjaan->sks}}</td>
-              <td>{{ $pekerjaan->tahun_ajaran}}</td>
+              <td>{{ $pekerjaan->tahun_ajaran}} - {{ $pekerjaan->semester}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
+              <td>{{ $pekerjaan->sks}}</td>
               <td>
-                  <a href="/admin/{{$pekerjaan->id}}/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/{{$pekerjaan->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/admin/{{$pekerjaan->id}}/dtl_pekerjaan" class="badge">EDIT</a>
+                  <a href="/admin/{{$pekerjaan->id}}/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
               </tr>
           @endforeach
@@ -203,11 +184,29 @@
             <div class="form-group">
                 <label for="kelas">Matakuliah</label>
                 <select name="kelas" class="form-control" id="kelas">
-                  @foreach($kelas as $kelas)
-                  <option value="{{$kelas}}"></option>
+                  <option> Silahkan Pilih </option>
+                  @foreach($kelas2 as $kelas2)
+                  <option value="{{$kelas2->id}}" data-price="{{$kelas2->sks}}" data-price2="{{$kelas2->jumlah_dosen}}" data-price3="{{$kelas2->sifat}}" data-price4="{{$kelas2->jumlah_mhs}}"> {{$kelas2->matakuliah->nama}} - Grup {{$kelas2->grup}} - {{$kelas2->sifat}}</option>
                   @endforeach
                 </select>
             </div>
+            <div class="form-group">             
+              <span>Sifat</span>
+              <input id="kelas_sifat" name="kelas_sifat" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>SKS</span>
+              <input id="kelas_sks" name="kelas_sks" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>Jumlah Mahasiswa</span>
+              <input id="kelas_jmlmhs" name="kelas_jmlmhs" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>Jumlah Dosen</span>
+              <input id="kelas_jmldsn" name="kelas_jmldsn" type="text" class="form-control" readonly>
+            </div>
+            
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
               <button type="submit" class="btn btn-success">Buat</button>
@@ -302,8 +301,21 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{$sumBkdNp}}, {{$sumBkd}}]
+        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
     }]
+});
+
+$(document).ready(function(){
+  $('#kelas').on('change',function(){
+    var sks = $(this).children('option:selected').data('price');
+    var dsn = $(this).children('option:selected').data('price2');
+    var sft = $(this).children('option:selected').data('price3');
+    var mhs = $(this).children('option:selected').data('price4');
+    $('#kelas_sks').val(sks);
+    $('#kelas_jmldsn').val(dsn);
+    $('#kelas_sifat').val(sft);
+    $('#kelas_jmlmhs').val(mhs);
+  });
 });
 </script>
 

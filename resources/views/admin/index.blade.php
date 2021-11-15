@@ -2,6 +2,15 @@
 @section('title', 'Home')
 @section('home', 'active')
 @section('content')
+@if (session('status'))
+  <div class="text-center alert alert-success">
+    {{ session('status') }}
+  </div>
+@elseif(session('error'))
+  <div class="text-center alert alert-danger">
+    {{ session('error') }}
+  </div>
+@endif
 <div class="panel panel-headline">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Laporan Kelas</b></h3>
@@ -16,23 +25,26 @@
             <th>NOMOR </th>
             <th>NAMA MATAKULIAH</TH>
             <th>GRUP</th>
+            <th>DOSEN</TH>
             <th>SKS</th>
             <th>SEMESTER</th>
             <th>TAHUN AJARAN</th>
+            <th>BKD</th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkd = 0;@endphp
-          @foreach($kelas as $kelas)
-          @php $sumBkd += $kelas->bkd();@endphp
+          @foreach($kelas->sortBy('kelas_id') as $kelas)
+          @php $sumBkd += $kelas->kelas->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-   
-              <td>{{ $kelas->matakuliah->nama}}</th>
-              <td>{{ $kelas->grup}}</td>
-              <td>{{ $kelas->sks}}</td>
-              <td>{{ $kelas->semester}}</td>
-              <td>{{ $kelas->tahun_ajaran}}</td>
+              <td>{{ $kelas->kelas->matakuliah->nama}}</th>
+              <td>{{ $kelas->kelas->grup}}</td>
+              <td>{{ $kelas->dosen->nama}}</th>
+              <td>{{ $kelas->kelas->sks}}</td>
+              <td>{{ $kelas->kelas->semester}}</td>
+              <td>{{ $kelas->kelas->tahun_ajaran}}</td>
+              <td>{{ number_format($kelas->kelas->bkd(),2)}}</td>
               </tr>
           @endforeach
         </tbody>
@@ -45,19 +57,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Laporan Pekerjaan</b></h3>
     <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
   </div>
 
   <div class="panel-body">
@@ -68,9 +67,9 @@
             <th>NOMOR </th>
             <th>NAMA DOSEN </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>BKD</th>
         </tr>
         </thead>
         <tbody>
@@ -81,9 +80,9 @@
               <th scope="row">{{ $loop->iteration }}</th>
               <td>{{ $pekerjaan->dosen->nama}}</th>
               <td>{{ $pekerjaan->jenis_pekerjaan}}</th>
-              <td>{{ $pekerjaan->sks}}</td>
-              <td>{{ $pekerjaan->tahun_ajaran}}</td>
+              <td>{{ $pekerjaan->tahun_ajaran}} - {{ $pekerjaan->semester}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
+              <td>{{ $pekerjaan->sks}}</td>
               </tr>
           @endforeach
         </tbody>
@@ -162,7 +161,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{$sumBkdNp}}, {{$sumBkd}}]
+        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
     }]
 });
 </script>

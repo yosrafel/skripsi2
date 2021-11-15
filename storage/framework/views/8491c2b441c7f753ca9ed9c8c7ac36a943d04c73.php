@@ -55,13 +55,14 @@
 						<?php elseif(auth()->user()->role == 'kaprodi'): ?>
 						<li><a href="/" class="<?php echo $__env->yieldContent('home'); ?>"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/kaprodi/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
+						<li><a href="/kaprodi/profil" class="<?php echo $__env->yieldContent('profil'); ?>"><i class="lnr lnr-code"></i> <span>Profil</span></a></li>
 						<?php elseif(auth()->user()->role == 'admin'): ?>
 						<li><a href="/" class="<?php echo $__env->yieldContent('home'); ?>"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/admin/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
 						<?php elseif(auth()->user()->role == 'inqa'): ?>
 						<li><a href="/" class="<?php echo $__env->yieldContent('home'); ?>"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
-						<!-- <li><a href="/inqa/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li> -->
-						<!-- <li><a href="/admin/listdosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-chart-bars"></i> <span>Dosen</span></a></li> -->
+						<!-- <li><a href="/inqa/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
+						<li><a href="/admin/listdosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-chart-bars"></i> <span>Dosen</span></a></li> -->
 						<!-- <li><a href="panels.html" class=""><i class="lnr lnr-cog"></i> <span>Panels</span></a></li>
 						<li><a href="notifications.html" class=""><i class="lnr lnr-alarm"></i> <span>Notifications</span></a></li>
 						<li>

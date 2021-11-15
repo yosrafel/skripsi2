@@ -12,6 +12,7 @@ use App\Kelas;
 use App\Pekerjaan;
 use App\User;
 use App\Matakuliah;
+use App\DosenKelas;
 
 class DashboardController extends Controller
 {
@@ -24,14 +25,14 @@ class DashboardController extends Controller
 			return view('index', compact(['presensi']));
 		}elseif($role == 'admin'){
             $user = User::all()->where('role', 'dosen');
-            $kelas = Kelas::with('dosen')->get();
+            $kelas = DosenKelas::all();
             $pekerjaan = Pekerjaan::all();
             return view('admin/index', compact(['user', 'kelas', 'pekerjaan']));
 		}elseif($role == 'kaprodi'){
             $user = User::all()->where('role', 'dosen');
-            $kelas = Kelas::all();
+            $kelas = DosenKelas::all();
             $pekerjaan = Pekerjaan::all();
-            return view('kaprodi/index', compact(['user', 'kelas', 'pekerjaan']));
+            return view('admin/index', compact(['user', 'kelas', 'pekerjaan']));
 		}elseif($role == 'dosen'){
 			$profil = auth()->user()->dosen;
 			$dosen = Dosen::all();
@@ -40,14 +41,20 @@ class DashboardController extends Controller
             $matakuliah = Matakuliah::all();
 			return view('dosen/index', compact(['kelas', 'pekerjaan', 'dosen', 'profil', 'matakuliah']));
 		}elseif($role == 'inqa'){
-            $dosen = Dosen::all();
-            $dosen2 = Dosen::all();
-            return view('inqa/index', compact(['dosen', 'dosen2']));
+            $user = User::all()->where('role', 'dosen');
+            $kelas = DosenKelas::all();
+            $pekerjaan = Pekerjaan::all();
+            return view('inqa/index', compact(['user', 'kelas', 'pekerjaan']));
 		}
     }
 
     
     //INQA
+    public function listdsnIn()
+    {
+        $dosen = Dosen::all();
+        return view('inqa/list_dosen', compact(['dosen']));
+    }
 
     public function profiledsnIn($id)
     {
@@ -62,6 +69,7 @@ class DashboardController extends Controller
     public function updateProfilDsn(Request $req)
     {
         $dosen = auth()->user()->dosen;
+        $dosen ->nama = $req->input('nama');
         $dosen ->alamat = $req->input('alamat');
         $dosen ->no_telp = $req->input('no_telp');
         $dosen ->save();
@@ -147,15 +155,15 @@ class DashboardController extends Controller
     {
         $dosen = Dosen::find($id);
         $kelas = Kelas::all();
+        $kelas2 = Kelas::all();
         $pekerjaan = Pekerjaan::all();
         $matakuliah = Matakuliah::all();
-        return view('admin/profiledsn', compact(['dosen', 'kelas', 'pekerjaan', 'matakuliah']));
+        return view('admin/profiledsn', compact(['dosen', 'kelas', 'kelas2', 'pekerjaan', 'matakuliah']));
     }
 
     public function createKelasAdm(Request $req, $id)
     {
         $dosen = Dosen::find($id);
-        $kelas = Kelas::all();
         if($dosen->kelas()->where('kelas_id',$req->kelas)->exists()){
             return back()->with('error', 'Kelas Sudah Terdaftar!');
         }
@@ -176,9 +184,9 @@ class DashboardController extends Controller
 
     public function deleteKelasAdm($id, $idkelas)
     {
-        $dosen = auth()->user()->dosen;
+        $dosen = Dosen::find($id);
         $dosen->kelas()->detach($idkelas);
-        return back()->with('status', 'Kelas Berhasil Dihapus!');
+        return redirect()->back()->with('status', 'Pekerjaan Berhasil Dihapus!');
     }
 
     public function createPkjAdm(Request $req)
@@ -197,20 +205,20 @@ class DashboardController extends Controller
     public function detailPkjAdm($id)
     {
         $pekerjaan = Pekerjaan::find($id);
-        return view('dosen/detail_pkj', compact(['pekerjaan']));
+        return view('admin/dtl_pekerjaan', compact(['pekerjaan']));
     }
 
     public function updatePkjAdm(Request $req, $id)
     {
         $pekerjaan = Pekerjaan::find($id);
-        $pekerjaan ->dosen_id = auth()->user()->dosen->id;
+        $pekerjaan ->dosen_id = $req->input('dosen_id');
         $pekerjaan ->jenis_pekerjaan = $req->input('jenis_pekerjaan');
         $pekerjaan ->keterangan = $req->input('keterangan');
         $pekerjaan ->sks = $req->input('sks');
         $pekerjaan ->tahun_ajaran = $req->input('tahun_ajaran');
         $pekerjaan ->semester = $req->input('semester');
         $pekerjaan ->save();
-        return redirect('/')->with('status', 'Pekerjaan Berhasil Diubah!');
+        return redirect('admin/'.$pekerjaan->dosen_id.'/profiledsn')->with('status', 'Pekerjaan Berhasil Diubah!');
     }
     
     public function deletePkjAdm($id)
@@ -232,8 +240,126 @@ class DashboardController extends Controller
     {
         $dosen = Dosen::find($id);
         $kelas = Kelas::all();
+        $kelas2 = Kelas::all();
         $pekerjaan = Pekerjaan::all();
         $matakuliah = Matakuliah::all();
-        return view('kaprodi/profiledsn', compact(['dosen', 'kelas', 'pekerjaan', 'matakuliah']));
+        return view('kaprodi/profiledsn', compact(['dosen', 'kelas', 'kelas2', 'pekerjaan', 'matakuliah']));
+    }
+
+    public function profil()
+    {
+        $profil = auth()->user()->dosen;
+        $dosen = Dosen::all();
+        $kelas = Kelas::all();
+        $pekerjaan = Pekerjaan::all();
+        $matakuliah = Matakuliah::all();
+        return view('kaprodi/profil', compact(['kelas', 'pekerjaan', 'dosen', 'profil', 'matakuliah']));
+    }
+
+    public function updateProfilKp(Request $req)
+    {
+        $dosen = auth()->user()->dosen;
+        $dosen ->nama = $req->input('nama');
+        $dosen ->alamat = $req->input('alamat');
+        $dosen ->no_telp = $req->input('no_telp');
+        $dosen ->save();
+        return back()->with('status', 'Profil Berhasil Diubah!');
+    }
+
+    public function createKelasKp(Request $req, $id)
+    {
+        $dosen = Dosen::find($id);
+        if($dosen->kelas()->where('kelas_id',$req->kelas)->exists()){
+            return back()->with('error', 'Kelas Sudah Terdaftar!');
+        }
+        if($req->kelas_sifat == 'Team Teaching'){
+            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+            'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,
+            'verifikasi' => 'Ya']);                          
+            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+        }elseif($req->kelas_sifat == 'Group Teaching'){
+            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+            'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,
+            'verifikasi' => 'Ya']);
+            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+        }elseif($req->kelas_sifat == 'Asistensi'){
+            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+            'bkd_kelas' => ($req->kelas_jmlmhs * 0.5),
+            'verifikasi' => 'Ya']);                          
+            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+        }
+    }
+
+    public function deleteKelasKp($id, $idkelas)
+    {
+        $dosen = Dosen::find($id);
+        $dosen->kelas()->detach($idkelas);
+        return redirect()->back()->with('status', 'Pekerjaan Berhasil Dihapus!');
+    }
+
+    public function createPkjKp(Request $req)
+    {
+        $pekerjaan = new Pekerjaan;
+        $pekerjaan ->dosen_id = $req->input('dosen_id');
+        $pekerjaan ->jenis_pekerjaan = $req->input('jenis_pekerjaan');
+        $pekerjaan ->keterangan = $req->input('keterangan');
+        $pekerjaan ->sks = $req->input('sks');
+        $pekerjaan ->tahun_ajaran = $req->input('tahun_ajaran');
+        $pekerjaan ->semester = $req->input('semester');
+        $pekerjaan ->verifikasi = 'Ya';
+        $pekerjaan ->save();
+        return back()->with('status', 'Pekerjaan Berhasil Terdaftar!');
+    }
+
+    public function detailPkjKp($id)
+    {
+        $pekerjaan = Pekerjaan::find($id);
+        return view('kaprodi/dtl_pekerjaan', compact(['pekerjaan']));
+    }
+
+    public function updatePkjKp(Request $req, $id)
+    {
+        $pekerjaan = Pekerjaan::find($id);
+        $pekerjaan ->dosen_id = $req->input('dosen_id');
+        $pekerjaan ->jenis_pekerjaan = $req->input('jenis_pekerjaan');
+        $pekerjaan ->keterangan = $req->input('keterangan');
+        $pekerjaan ->sks = $req->input('sks');
+        $pekerjaan ->tahun_ajaran = $req->input('tahun_ajaran');
+        $pekerjaan ->semester = $req->input('semester');
+        $pekerjaan ->save();
+        return redirect('kaprodi/profil')->with('status', 'Pekerjaan Berhasil Diubah!');
+    }
+    
+    public function deletePkjKp($id)
+    {
+        $pekerjaan = Pekerjaan::find($id);
+        Pekerjaan::destroy($id);
+        return redirect()->back()->with('status', 'Pekerjaan Berhasil Dihapus!');
+    }
+
+    public function verifikasi($id)
+    {
+        $kelas = DosenKelas::find($id);
+        return view('kaprodi/verifikasi_kls', compact(['kelas']));
+    }
+    
+    public function updateVerifKls(Request $req, $id){
+        $kelas = DosenKelas::find($id);
+        $kelas ->verifikasi = $req->input('verifikasi');
+        $kelas ->save();
+        return redirect('kaprodi/'.$kelas->dosen_id.'/profiledsn')->with('status', 'Status Sudah Diverifikasi !');
+    }
+
+    public function verifikasiPkj($id)
+    {
+        $pekerjaan = Pekerjaan::find($id);
+        return view('kaprodi/verifikasi_pkj', compact(['pekerjaan']));
+    }
+
+    public function updateVerifPkj(Request $req, $id){
+        $pekerjaan = Pekerjaan::find($id);
+        $pekerjaan ->verifikasi = $req->input('verifikasi');
+        $pekerjaan ->save();
+        return redirect('kaprodi/'.$pekerjaan->dosen->id.'/profiledsn')->with('status', 'Status Sudah Diverifikasi !');
     }
 }

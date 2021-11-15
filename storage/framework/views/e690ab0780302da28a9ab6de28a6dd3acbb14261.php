@@ -84,7 +84,6 @@
           <th>JUMLAH DOSEN</th>
           <th>BKD</th>
           <th>BKD INQA</th>
-          <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
@@ -101,9 +100,6 @@
               <td><?php echo e($kelas->jumlah_dosen); ?></td>
               <td><?php echo e(number_format($kelas->bkd(), 2)); ?></td>
               <td><?php echo e(number_format($kelas->bkdinq(), 2)); ?></td>
-              <td>
-                  <a href="/admin/<?php echo e($kelas->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
-              </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
@@ -142,7 +138,6 @@
             <th>BKD</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
-            <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
@@ -155,10 +150,6 @@
               <td><?php echo e($pekerjaan->bkdnp()); ?></td>
               <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
-              <td>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
-              </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
@@ -217,7 +208,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e($sumBkdNp); ?>, <?php echo e($sumBkd); ?>]
+        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
     }]
 });
 </script>

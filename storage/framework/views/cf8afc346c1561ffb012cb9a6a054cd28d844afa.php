@@ -2,6 +2,17 @@
 <?php $__env->startSection('title', 'Profile Dosen'); ?>
 <?php $__env->startSection('dosen', 'active'); ?>
 <?php $__env->startSection('content'); ?>
+<?php if(session('status')): ?>
+  <div class="text-center alert alert-success">
+    <?php echo e(session('status')); ?>
+
+  </div>
+<?php elseif(session('error')): ?>
+  <div class="text-center alert alert-danger">
+    <?php echo e(session('error')); ?>
+
+  </div>
+<?php endif; ?>
 <div class="container float-left mb-5">
   <a class=" container " href="/kaprodi/list_dosen"> < Kembali</a>
 </div>
@@ -53,21 +64,7 @@
 <div class="panel panel-headline col-md-12">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
-    <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
+    <hr> 
   </div>
 
   <div class="panel-body">
@@ -80,27 +77,27 @@
           <th>GRUP</th>
           <th>SIFAT</th>
           <th>SKS</th>
-          <th>SEMESTER</th>
           <th>TAHUN AJARAN</th>
           <th>BKD</th>
+          <th>Verifikasi</th>
           <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkd = 0;?>
-          <?php $__currentLoopData = $dosen->kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <?php $sumBkd += $kelas->bkd();?>
+          <?php $__currentLoopData = $dosen->dosenKelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $sumBkd += $kelas->kelas->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-              <td><?php echo e($kelas->matakuliah->nama); ?></th>
-              <td><?php echo e($kelas->grup); ?></td>
-              <td><?php echo e($kelas->sifat); ?></td>
-              <td><?php echo e($kelas->sks); ?></td>
-              <td><?php echo e($kelas->semester); ?></td>
-              <td><?php echo e($kelas->tahun_ajaran); ?></td>
-              <td><?php echo e(number_format($kelas->bkd(), 2)); ?></td>
+              <td><?php echo e($kelas->kelas->matakuliah->nama); ?></th>
+              <td><?php echo e($kelas->kelas->grup); ?></td>
+              <td><?php echo e($kelas->kelas->sifat); ?></td>
+              <td><?php echo e($kelas->kelas->sks); ?></td>
+              <td><?php echo e($kelas->kelas->tahun_ajaran); ?> - <?php echo e($kelas->kelas->semester); ?></td>
+              <td><?php echo e(number_format($kelas->kelas->bkd(), 2)); ?></td>
+              <td><?php echo e($kelas->verifikasi); ?></td>
               <td>
-                  <a href="/admin/<?php echo e($kelas->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/kaprodi/<?php echo e($kelas->id); ?>/verifikasi_kls" class="badge badge-danger">VERIFIKASI</a>
               </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -114,20 +111,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
   </div>
 
   <div class="panel-body">
@@ -135,11 +118,12 @@
       <table class="table" id="dtBasicExamples">
         <thead>
         <tr>
-        <th>NOMOR </th>
+            <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
             <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>VERIFIKASI</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -150,12 +134,12 @@
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
-              <td><?php echo e($pekerjaan->bkdnp()); ?></td>
+              <td><?php echo e($pekerjaan->sks); ?></td>
               <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
+              <td><?php echo e($pekerjaan->verifikasi); ?></td>
               <td>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/kaprodi/<?php echo e($pekerjaan->id); ?>/verifikasi_pkj" class="badge badge-danger">VERIFIKASI</a>
               </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -214,8 +198,21 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e($sumBkdNp); ?>, <?php echo e($sumBkd); ?>]
+        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
     }]
+});
+
+$(document).ready(function(){
+  $('#kelas').on('change',function(){
+    var sks = $(this).children('option:selected').data('price');
+    var dsn = $(this).children('option:selected').data('price2');
+    var sft = $(this).children('option:selected').data('price3');
+    var mhs = $(this).children('option:selected').data('price4');
+    $('#kelas_sks').val(sks);
+    $('#kelas_jmldsn').val(dsn);
+    $('#kelas_sifat').val(sft);
+    $('#kelas_jmlmhs').val(mhs);
+  });
 });
 </script>
 

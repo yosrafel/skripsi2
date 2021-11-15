@@ -2,6 +2,17 @@
 <?php $__env->startSection('title', 'Home'); ?>
 <?php $__env->startSection('home', 'active'); ?>
 <?php $__env->startSection('content'); ?>
+<?php if(session('status')): ?>
+  <div class="text-center alert alert-success">
+    <?php echo e(session('status')); ?>
+
+  </div>
+<?php elseif(session('error')): ?>
+  <div class="text-center alert alert-danger">
+    <?php echo e(session('error')); ?>
+
+  </div>
+<?php endif; ?>
 <div class="panel panel-headline">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Laporan Kelas</b></h3>
@@ -16,23 +27,26 @@
             <th>NOMOR </th>
             <th>NAMA MATAKULIAH</TH>
             <th>GRUP</th>
+            <th>DOSEN</TH>
             <th>SKS</th>
             <th>SEMESTER</th>
             <th>TAHUN AJARAN</th>
+            <th>BKD</th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkd = 0;?>
-          <?php $__currentLoopData = $kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <?php $sumBkd += $kelas->bkd();?>
+          <?php $__currentLoopData = $kelas->sortBy('kelas_id'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $sumBkd += $kelas->kelas->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-   
-              <td><?php echo e($kelas->matakuliah->nama); ?></th>
-              <td><?php echo e($kelas->grup); ?></td>
-              <td><?php echo e($kelas->sks); ?></td>
-              <td><?php echo e($kelas->semester); ?></td>
-              <td><?php echo e($kelas->tahun_ajaran); ?></td>
+              <td><?php echo e($kelas->kelas->matakuliah->nama); ?></th>
+              <td><?php echo e($kelas->kelas->grup); ?></td>
+              <td><?php echo e($kelas->dosen->nama); ?></th>
+              <td><?php echo e($kelas->kelas->sks); ?></td>
+              <td><?php echo e($kelas->kelas->semester); ?></td>
+              <td><?php echo e($kelas->kelas->tahun_ajaran); ?></td>
+              <td><?php echo e(number_format($kelas->kelas->bkd(),2)); ?></td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
@@ -45,20 +59,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Laporan Pekerjaan</b></h3>
     <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
   </div>
 
   <div class="panel-body">
@@ -69,9 +69,9 @@
             <th>NOMOR </th>
             <th>NAMA DOSEN </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>BKD</th>
         </tr>
         </thead>
         <tbody>
@@ -82,9 +82,9 @@
               <th scope="row"><?php echo e($loop->iteration); ?></th>
               <td><?php echo e($pekerjaan->dosen->nama); ?></th>
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
-              <td><?php echo e($pekerjaan->sks); ?></td>
-              <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
+              <td><?php echo e($pekerjaan->tahun_ajaran); ?> - <?php echo e($pekerjaan->semester); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
+              <td><?php echo e($pekerjaan->sks); ?></td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
@@ -163,7 +163,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e($sumBkdNp); ?>, <?php echo e($sumBkd); ?>]
+        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
     }]
 });
 </script>

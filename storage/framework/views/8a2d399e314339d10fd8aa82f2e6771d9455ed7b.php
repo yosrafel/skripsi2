@@ -79,8 +79,8 @@
             <th>GRUP</th>
             <th>SIFAT</th>
             <th>SKS</th>
-            <th>SEMESTER</th>
             <th>TAHUN AJARAN</th>
+            <th>VERIFIKASI</th>
             <th>BKD</th>
             <th>ACTION </th>
         </tr>
@@ -95,8 +95,8 @@
               <td><?php echo e($kls->grup); ?></td>
               <td><?php echo e($kls->sifat); ?></td>
               <td><?php echo e($kls->sks); ?></td>
-              <td><?php echo e($kls->semester); ?></td>
-              <td><?php echo e($kls->tahun_ajaran); ?></td>
+              <td><?php echo e($kls->tahun_ajaran); ?> - <?php echo e($kls->semester); ?></td>
+              <td><?php echo e($kls->pivot->verifikasi); ?></td>
               <td><?php echo e(number_format($kls->bkd(), 2)); ?></td>
               <td>
                   <a href="/dosen/<?php echo e($profil->id); ?>/<?php echo e($kls->id); ?>/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -128,9 +128,10 @@
         <tr>
             <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>BKD</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>VERIFIKASI</th>
+            <th>BKD</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -141,9 +142,10 @@
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
-              <td><?php echo e($pekerjaan->bkdnp()); ?></td>
-              <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
+              <td><?php echo e($pekerjaan->tahun_ajaran); ?> - <?php echo e($pekerjaan->semester); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
+              <td><?php echo e($pekerjaan->verifikasi); ?></td>
+              <td><?php echo e($pekerjaan->bkdnp()); ?></td>
               <td>
                   <a href="/dosen/<?php echo e($pekerjaan->id); ?>/detail_pekerjaan" class="badge">EDIT</a>
                   <a href="/dosen/<?php echo e($pekerjaan->id); ?>/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -349,7 +351,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e($sumBkdNp); ?>, <?php echo e($sumBkd); ?>]
+        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
     }]
 });
 

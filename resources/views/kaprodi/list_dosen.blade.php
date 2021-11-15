@@ -16,9 +16,8 @@
             <th>NOMOR </th>
             <th>NIK </th>
             <th>NAMA</TH>
-            <th>ALAMAT</th>
-            <th>EMAIL </th>
-            <th>NO TELEPON</th>
+            <th>BKD PENGAJARAN</th>
+            <th>BKD NON-PENGAJARAN </th>
             <th></th>
           </tr>
         </thead>
@@ -28,9 +27,8 @@
               <th scope="row">{{ $loop->iteration }}</td>
               <td>{{ $dosen->nik}}</td>
               <td>{{ $dosen->nama}}</td>
-              <td>{{ $dosen->alamat}}</td>
-              <td>{{ $dosen->user->email}}</td>
-              <td>{{ $dosen->no_telp}}</td>
+              <td>{{ $dosen->kelas()->sum('bkd_kelas')}}</td>
+              <td>{{ $dosen->pekerjaan->sum('sks')}}</td>
               <td>
                 <a href="/kaprodi/{{$dosen->id}}/profiledsn" class="badge">DETAIL</a>
               </td>

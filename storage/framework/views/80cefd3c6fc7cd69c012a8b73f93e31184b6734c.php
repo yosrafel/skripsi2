@@ -2,6 +2,17 @@
 <?php $__env->startSection('title', 'Profile Dosen'); ?>
 <?php $__env->startSection('dosen', 'active'); ?>
 <?php $__env->startSection('content'); ?>
+<?php if(session('status')): ?>
+  <div class="text-center alert alert-success">
+    <?php echo e(session('status')); ?>
+
+  </div>
+<?php elseif(session('error')): ?>
+  <div class="text-center alert alert-danger">
+    <?php echo e(session('error')); ?>
+
+  </div>
+<?php endif; ?>
 <div class="container float-left mb-5">
   <a class=" container " href="/admin/list_dosen"> < Kembali</a>
 </div>
@@ -53,21 +64,7 @@
 <div class="panel panel-headline col-md-12">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
-    <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
+    <hr> 
   </div>
 
   <div class="container">
@@ -87,7 +84,6 @@
           <th>SIFAT</th>
           <th>SKS</th>
           <th>TAHUN AJARAN</th>
-          <th>JUMLAH DOSEN</th>
           <th>BKD</th>
           <th>ACTION </th>
         </tr>
@@ -103,10 +99,9 @@
               <td><?php echo e($kelas->sifat); ?></td>
               <td><?php echo e($kelas->sks); ?></td>
               <td><?php echo e($kelas->tahun_ajaran); ?> - <?php echo e($kelas->semester); ?></td>
-              <td><?php echo e($kelas->jumlah_dosen); ?></td>
               <td><?php echo e(number_format($kelas->bkd(), 2)); ?></td>
               <td>
-                  <a href="/admin/<?php echo e($kelas->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/admin/<?php echo e($dosen->id); ?>/<?php echo e($kelas->id); ?>/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -120,20 +115,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
   </div>
 
   <div class="container">
@@ -149,9 +130,9 @@
         <tr>
             <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>BKD</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -162,12 +143,12 @@
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
-              <td><?php echo e($pekerjaan->sks); ?></td>
-              <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
+              <td><?php echo e($pekerjaan->tahun_ajaran); ?> - <?php echo e($pekerjaan->semester); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
+              <td><?php echo e($pekerjaan->sks); ?></td>
               <td>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/dtl_pekerjaan" class="badge">EDIT</a>
+                  <a href="/admin/<?php echo e($pekerjaan->id); ?>/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -206,11 +187,29 @@
             <div class="form-group">
                 <label for="kelas">Matakuliah</label>
                 <select name="kelas" class="form-control" id="kelas">
-                  <?php $__currentLoopData = $kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <option value="<?php echo e($kelas); ?>"></option>
+                  <option> Silahkan Pilih </option>
+                  <?php $__currentLoopData = $kelas2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas2): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                  <option value="<?php echo e($kelas2->id); ?>" data-price="<?php echo e($kelas2->sks); ?>" data-price2="<?php echo e($kelas2->jumlah_dosen); ?>" data-price3="<?php echo e($kelas2->sifat); ?>" data-price4="<?php echo e($kelas2->jumlah_mhs); ?>"> <?php echo e($kelas2->matakuliah->nama); ?> - Grup <?php echo e($kelas2->grup); ?> - <?php echo e($kelas2->sifat); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
+            <div class="form-group">             
+              <span>Sifat</span>
+              <input id="kelas_sifat" name="kelas_sifat" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>SKS</span>
+              <input id="kelas_sks" name="kelas_sks" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>Jumlah Mahasiswa</span>
+              <input id="kelas_jmlmhs" name="kelas_jmlmhs" type="text" class="form-control" readonly>
+            </div>
+            <div class="form-group">             
+              <span>Jumlah Dosen</span>
+              <input id="kelas_jmldsn" name="kelas_jmldsn" type="text" class="form-control" readonly>
+            </div>
+            
           <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
               <button type="submit" class="btn btn-success">Buat</button>
@@ -306,8 +305,21 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e($sumBkdNp); ?>, <?php echo e($sumBkd); ?>]
+        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
     }]
+});
+
+$(document).ready(function(){
+  $('#kelas').on('change',function(){
+    var sks = $(this).children('option:selected').data('price');
+    var dsn = $(this).children('option:selected').data('price2');
+    var sft = $(this).children('option:selected').data('price3');
+    var mhs = $(this).children('option:selected').data('price4');
+    $('#kelas_sks').val(sks);
+    $('#kelas_jmldsn').val(dsn);
+    $('#kelas_sifat').val(sft);
+    $('#kelas_jmlmhs').val(mhs);
+  });
 });
 </script>
 

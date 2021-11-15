@@ -16,9 +16,8 @@
             <th>NOMOR </th>
             <th>NIK </th>
             <th>NAMA</TH>
-            <th>ALAMAT</th>
-            <th>EMAIL </th>
-            <th>NO TELEPON</th>
+            <th>BKD PENGAJARAN</th>
+            <th>BKD NON-PENGAJARAN </th>
             <th></th>
           </tr>
         </thead>
@@ -28,9 +27,8 @@
               <th scope="row"><?php echo e($loop->iteration); ?></td>
               <td><?php echo e($dosen->nik); ?></td>
               <td><?php echo e($dosen->nama); ?></td>
-              <td><?php echo e($dosen->alamat); ?></td>
-              <td><?php echo e($dosen->user->email); ?></td>
-              <td><?php echo e($dosen->no_telp); ?></td>
+              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?></td>
+              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?></td>
               <td>
                 <a href="/kaprodi/<?php echo e($dosen->id); ?>/profiledsn" class="badge">DETAIL</a>
               </td>

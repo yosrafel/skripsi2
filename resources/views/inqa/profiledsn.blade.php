@@ -83,7 +83,6 @@
           <th>JUMLAH DOSEN</th>
           <th>BKD</th>
           <th>BKD INQA</th>
-          <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
@@ -100,9 +99,6 @@
               <td>{{ $kelas->jumlah_dosen}}</td>
               <td>{{ number_format($kelas->bkd(), 2)}}</td>
               <td>{{ number_format($kelas->bkdinq(), 2)}}</td>
-              <td>
-                  <a href="/admin/{{$kelas->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
-              </td>
               </tr>
           @endforeach
         </tbody>
@@ -140,7 +136,6 @@
             <th>BKD</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
-            <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
@@ -153,10 +148,6 @@
               <td>{{ $pekerjaan->bkdnp()}}</td>
               <td>{{ $pekerjaan->tahun_ajaran}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
-              <td>
-                  <a href="/admin/{{$pekerjaan->id}}/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/{{$pekerjaan->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
-              </td>
               </tr>
           @endforeach
         </tbody>
@@ -215,7 +206,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{$sumBkdNp}}, {{$sumBkd}}]
+        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
     }]
 });
 </script>

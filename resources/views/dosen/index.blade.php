@@ -77,8 +77,8 @@
             <th>GRUP</th>
             <th>SIFAT</th>
             <th>SKS</th>
-            <th>SEMESTER</th>
             <th>TAHUN AJARAN</th>
+            <th>VERIFIKASI</th>
             <th>BKD</th>
             <th>ACTION </th>
         </tr>
@@ -93,8 +93,8 @@
               <td>{{ $kls->grup}}</td>
               <td>{{ $kls->sifat}}</td>
               <td>{{ $kls->sks}}</td>
-              <td>{{ $kls->semester}}</td>
-              <td>{{ $kls->tahun_ajaran}}</td>
+              <td>{{ $kls->tahun_ajaran}} - {{ $kls->semester}}</td>
+              <td>{{ $kls->pivot->verifikasi}}</td>
               <td>{{ number_format($kls->bkd(), 2)}}</td>
               <td>
                   <a href="/dosen/{{$profil->id}}/{{$kls->id}}/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -126,9 +126,10 @@
         <tr>
             <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
-            <th>BKD</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>VERIFIKASI</th>
+            <th>BKD</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -139,9 +140,10 @@
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
               <td>{{ $pekerjaan->jenis_pekerjaan}}</th>
-              <td>{{ $pekerjaan->bkdnp()}}</td>
-              <td>{{ $pekerjaan->tahun_ajaran}}</td>
+              <td>{{ $pekerjaan->tahun_ajaran}} - {{ $pekerjaan->semester}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
+              <td>{{ $pekerjaan->verifikasi}}</td>
+              <td>{{ $pekerjaan->bkdnp()}}</td>
               <td>
                   <a href="/dosen/{{$pekerjaan->id}}/detail_pekerjaan" class="badge">EDIT</a>
                   <a href="/dosen/{{$pekerjaan->id}}/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -343,7 +345,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{$sumBkdNp}}, {{$sumBkd}}]
+        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
     }]
 });
 

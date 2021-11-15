@@ -15,7 +15,11 @@ class Dosen extends Model
     }
 
     public function kelas(){
-        return $this->belongsToMany(Kelas::class)->withPivot('bkd_inqa', 'bkd_kelas');
+        return $this->belongsToMany(Kelas::class)->withPivot('bkd_inqa', 'bkd_kelas', 'verifikasi')->withTimeStamps();
+    }
+
+    public function dosenKelas(){
+        return $this->hasMany(DosenKelas::class);
     }
 
     public function pekerjaan(){

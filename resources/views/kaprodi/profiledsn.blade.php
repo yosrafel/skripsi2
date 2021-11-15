@@ -2,6 +2,15 @@
 @section('title', 'Profile Dosen')
 @section('dosen', 'active')
 @section('content')
+@if (session('status'))
+  <div class="text-center alert alert-success">
+    {{ session('status') }}
+  </div>
+@elseif(session('error'))
+  <div class="text-center alert alert-danger">
+    {{ session('error') }}
+  </div>
+@endif
 <div class="container float-left mb-5">
   <a class=" container " href="/kaprodi/list_dosen"> < Kembali</a>
 </div>
@@ -53,20 +62,7 @@
 <div class="panel panel-headline col-md-12">
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
-    <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
+    <hr> 
   </div>
 
   <div class="panel-body">
@@ -79,27 +75,27 @@
           <th>GRUP</th>
           <th>SIFAT</th>
           <th>SKS</th>
-          <th>SEMESTER</th>
           <th>TAHUN AJARAN</th>
           <th>BKD</th>
+          <th>Verifikasi</th>
           <th>ACTION </th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkd = 0;@endphp
-          @foreach($dosen->kelas as $kelas)
-          @php $sumBkd += $kelas->bkd();@endphp
+          @foreach($dosen->dosenKelas as $kelas)
+          @php $sumBkd += $kelas->kelas->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $kelas->matakuliah->nama}}</th>
-              <td>{{ $kelas->grup}}</td>
-              <td>{{ $kelas->sifat}}</td>
-              <td>{{ $kelas->sks}}</td>
-              <td>{{ $kelas->semester}}</td>
-              <td>{{ $kelas->tahun_ajaran}}</td>
-              <td>{{ number_format($kelas->bkd(), 2)}}</td>
+              <td>{{ $kelas->kelas->matakuliah->nama}}</th>
+              <td>{{ $kelas->kelas->grup}}</td>
+              <td>{{ $kelas->kelas->sifat}}</td>
+              <td>{{ $kelas->kelas->sks}}</td>
+              <td>{{ $kelas->kelas->tahun_ajaran}} - {{$kelas->kelas->semester}}</td>
+              <td>{{ number_format($kelas->kelas->bkd(), 2)}}</td>
+              <td>{{ $kelas->verifikasi}}</td>
               <td>
-                  <a href="/admin/{{$kelas->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/kaprodi/{{$kelas->id}}/verifikasi_kls" class="badge badge-danger">VERIFIKASI</a>
               </td>
               </tr>
           @endforeach
@@ -113,19 +109,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
   </div>
 
   <div class="panel-body">
@@ -133,11 +116,12 @@
       <table class="table" id="dtBasicExamples">
         <thead>
         <tr>
-        <th>NOMOR </th>
+            <th>NOMOR </th>
             <th>JENIS PEKERJAAN</TH>
             <th>SKS</th>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
+            <th>VERIFIKASI</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -148,12 +132,12 @@
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
               <td>{{ $pekerjaan->jenis_pekerjaan}}</th>
-              <td>{{ $pekerjaan->bkdnp()}}</td>
+              <td>{{ $pekerjaan->sks}}</td>
               <td>{{ $pekerjaan->tahun_ajaran}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
+              <td>{{ $pekerjaan->verifikasi}}</td>
               <td>
-                  <a href="/admin/{{$pekerjaan->id}}/dtlpresensi" class="badge">EDIT</a>
-                  <a href="/admin/{{$pekerjaan->id}}/delpresensi" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
+                  <a href="/kaprodi/{{$pekerjaan->id}}/verifikasi_pkj" class="badge badge-danger">VERIFIKASI</a>
               </td>
               </tr>
           @endforeach
@@ -212,8 +196,21 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{$sumBkdNp}}, {{$sumBkd}}]
+        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
     }]
+});
+
+$(document).ready(function(){
+  $('#kelas').on('change',function(){
+    var sks = $(this).children('option:selected').data('price');
+    var dsn = $(this).children('option:selected').data('price2');
+    var sft = $(this).children('option:selected').data('price3');
+    var mhs = $(this).children('option:selected').data('price4');
+    $('#kelas_sks').val(sks);
+    $('#kelas_jmldsn').val(dsn);
+    $('#kelas_sifat').val(sft);
+    $('#kelas_jmlmhs').val(mhs);
+  });
 });
 </script>
 
