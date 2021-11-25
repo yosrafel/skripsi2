@@ -1,7 +1,8 @@
 
-<?php $__env->startSection('title', 'Home'); ?>
+<?php $__env->startSection('title', 'List Dosen'); ?>
 <?php $__env->startSection('dosen', 'active'); ?>
 <?php $__env->startSection('content'); ?>
+
 <div class="panel panel-headline">
   <div class="panel-heading">
     <h3 class="panel-title"><b>List Dosen</b></h3>
@@ -10,31 +11,29 @@
 
   <div class="panel-body">
     <div style="overflow-x:auto;">
-      <table class="table" id="urutServis">
+      <table class="table" id="dtBasicExamples">
         <thead>
-          <tr>
-            <th>NOMOR </th>
-            <th>NIK </th>
-            <th>NAMA</TH>
-            <th>ALAMAT</th>
-            <th>EMAIL </th>
-            <th>NO TELEPON</th>
+        <tr>
+            <th>NIK</TH>
+            <th>NAMA DOSEN</TH>
+            <th>TOTAL BKD NON-PENGAJARAN</th>
+            <th>TOTAL BKD PENGAJARAN</th>
+            <th>TOTAL BKD PENGAJARAN (INQA)</th>
             <th></th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
           <?php $__currentLoopData = $dosen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dosen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <tr>
-              <th scope="row"><?php echo e($loop->iteration); ?></td>
-              <td><?php echo e($dosen->nik); ?></td>
-              <td><?php echo e($dosen->nama); ?></td>
-              <td><?php echo e($dosen->alamat); ?></td>
-              <td><?php echo e($dosen->user->email); ?></td>
-              <td><?php echo e($dosen->no_telp); ?></td>
+              <tr>
+              <td><?php echo e($dosen->nik); ?></th>
+              <td><?php echo e($dosen->nama); ?></th>
+              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?></th>
+              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?></th>
+              <td><?php echo e($dosen->kelas()->sum('bkd_inqa')); ?></th>
               <td>
                 <a href="/inqa/<?php echo e($dosen->id); ?>/profiledsn" class="badge">DETAIL</a>
               </td>
-            </tr>
+              </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
       </table>

@@ -1,6 +1,6 @@
 @extends('layout/master')
-@section('title', 'Home')
-@section('home', 'active')
+@section('title', 'List Dosen')
+@section('dosen', 'active')
 @section('content')
 
 <div class="panel panel-headline">

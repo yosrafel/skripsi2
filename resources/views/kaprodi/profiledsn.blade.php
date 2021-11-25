@@ -78,12 +78,12 @@
           <th>TAHUN AJARAN</th>
           <th>BKD</th>
           <th>Verifikasi</th>
-          <th>ACTION </th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkd = 0;@endphp
-          @foreach($dosen->dosenKelas as $kelas)
+          @foreach($dosen->dosenKelas->sortBy('sifat')->sortByDesc('verifikasi') as $kelas)
           @php $sumBkd += $kelas->kelas->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
@@ -122,12 +122,12 @@
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
             <th>VERIFIKASI</th>
-            <th>ACTION </th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkdNp = 0;@endphp
-          @foreach($dosen->pekerjaan as $pekerjaan)
+          @foreach($dosen->pekerjaan->sortByDesc('verifikasi') as $pekerjaan)
           @php $sumBkdNp += $pekerjaan->bkdnp();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>

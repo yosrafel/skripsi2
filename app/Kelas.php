@@ -25,15 +25,49 @@ class Kelas extends Model
         $a = null;
         $bkd = null;
         if($this->sifat == 'Team Teaching'){
-            $bkd = (($this->jumlah_mhs / 40) * ($this->sks * 1.5)) / $this->jumlah_dosen;
-            return $bkd;
+            if($this->jumlah_mhs <= 40){
+                $bkd = ($this->sks * 1.5) / $this->jumlah_dosen;
+                return $bkd;
+            }else{
+                $bkd = (($this->jumlah_mhs / 40) * ($this->sks * 1.5)) / $this->jumlah_dosen;
+                return $bkd;
+            }
         }elseif($this->sifat == 'Group Teaching'){
-            $bkd = (($this->jumlah_mhs / 40) * $this->sks) / $this->jumlah_dosen;
-            return $bkd;
-        }else{
+            if($this->jumlah_mhs <= 40){
+                $bkd = $this->sks / $this->jumlah_dosen;
+                return $bkd;
+            }else{
+                $bkd = (($this->jumlah_mhs / 40) * $this->sks) / $this->jumlah_dosen;
+                return $bkd;
+            }
+        }elseif($this->sifat == 'Tatap Muka'){
+            if($this->jumlah_mhs <= 40){
+                $bkd = $this->sks / $this->jumlah_dosen;
+                return $bkd;
+            }else{
+                $bkd = (($this->jumlah_mhs / 40) * $this->sks) / $this->jumlah_dosen;
+                return $bkd;
+            }
+        }elseif($this->sifat == 'Praktikum'){
+            if($this->jumlah_mhs <= 40){
+                $bkd = $this->sks / $this->jumlah_dosen;
+                return $bkd;
+            }else{
+                $bkd = (($this->jumlah_mhs / 40) * $this->sks) / $this->jumlah_dosen;
+                return $bkd;
+            }
+        }elseif($this->sifat == 'Kelas Lab'){
+            if($this->jumlah_mhs <= 40){
+                $bkd = 3.5 / $this->jumlah_dosen;
+                return $bkd;
+            }else{
+                $bkd = (($this->jumlah_mhs / 40) * 3.5) / $this->jumlah_dosen;
+                return $bkd;
+            }
+        }elseif($this->sifat == 'Asistensi'){
             $variabel = 0.5;
-            $a = $this->jumlah_mhs * $variabel;
-            return $a;
+            $bkd = $this->jumlah_mhs * $variabel;
+            return $bkd;
         }
     }
 

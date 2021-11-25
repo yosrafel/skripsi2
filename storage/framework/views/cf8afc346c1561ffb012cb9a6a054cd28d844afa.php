@@ -80,12 +80,12 @@
           <th>TAHUN AJARAN</th>
           <th>BKD</th>
           <th>Verifikasi</th>
-          <th>ACTION </th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkd = 0;?>
-          <?php $__currentLoopData = $dosen->dosenKelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $dosen->dosenKelas->sortBy('sifat')->sortByDesc('verifikasi'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <?php $sumBkd += $kelas->kelas->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
@@ -124,12 +124,12 @@
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
             <th>VERIFIKASI</th>
-            <th>ACTION </th>
+            <th> </th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkdNp = 0;?>
-          <?php $__currentLoopData = $dosen->pekerjaan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pekerjaan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $dosen->pekerjaan->sortByDesc('verifikasi'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pekerjaan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <?php $sumBkdNp += $pekerjaan->bkdnp();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>

@@ -1,9 +1,9 @@
 
 <?php $__env->startSection('title', 'Profile Dosen'); ?>
-<?php $__env->startSection('home', 'active'); ?>
+<?php $__env->startSection('dosen', 'active'); ?>
 <?php $__env->startSection('content'); ?>
 <div class="container float-left mb-5">
-  <a class=" container " href="/"> < Kembali</a>
+  <a class=" container " href="/inqa/list_dosen"> < Kembali</a>
 </div>
 <div class="">
   <div class="panel-profile col-md-4">
@@ -54,20 +54,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
     <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
   </div>
 
   <div class="panel-body">
@@ -82,13 +68,14 @@
           <th>SKS</th>
           <th>TAHUN AJARAN</th>
           <th>JUMLAH DOSEN</th>
+          <th>VERIFIKASI</th>
           <th>BKD</th>
           <th>BKD INQA</th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkd = 0; $sumBkdInqa = 0;?>
-          <?php $__currentLoopData = $dosen->kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $dosen->kelas->sortBy('sifat')->sortByDesc('verifikasi'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <?php $sumBkd += $kelas->bkd(); $sumBkdInqa += $kelas->bkdinq();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
@@ -98,6 +85,7 @@
               <td><?php echo e($kelas->sks); ?></td>
               <td><?php echo e($kelas->tahun_ajaran); ?> - <?php echo e($kelas->semester); ?></td>
               <td><?php echo e($kelas->jumlah_dosen); ?></td>
+              <td><?php echo e($kelas->pivot->verifikasi); ?></td>
               <td><?php echo e(number_format($kelas->bkd(), 2)); ?></td>
               <td><?php echo e(number_format($kelas->bkdinq(), 2)); ?></td>
               </tr>
@@ -112,20 +100,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    <?php if(count($errors) > 0): ?>
-      <div class="alert alert-danger">
-          <ul>
-              <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <li><?php echo e($error); ?></li>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-          </ul>
-      </div>
-    <?php elseif(session('status')): ?>
-      <div class="text-center alert alert-success">
-        <?php echo e(session('status')); ?>
-
-      </div> 
-    <?php endif; ?>  
   </div>
 
   <div class="panel-body">
@@ -133,22 +107,22 @@
       <table class="table" id="dtBasicExamples">
         <thead>
         <tr>
-        <th>NOMOR </th>
-            <th>JENIS PEKERJAAN</TH>
-            <th>BKD</th>
-            <th>TAHUN AJARAN</th>
-            <th>KETERANGAN</th>
+          <th>NOMOR </th>
+          <th>JENIS PEKERJAAN</TH>
+          <th>BKD</th>
+          <th>TAHUN AJARAN</th>
+          <th>KETERANGAN</th>
         </tr>
         </thead>
         <tbody>
         <?php $sumBkdNp = 0;?>
-          <?php $__currentLoopData = $dosen->pekerjaan; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pekerjaan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $dosen->pekerjaan->sortByDesc('verifikasi'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $pekerjaan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
           <?php $sumBkdNp += $pekerjaan->bkdnp();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
               <td><?php echo e($pekerjaan->bkdnp()); ?></td>
-              <td><?php echo e($pekerjaan->tahun_ajaran); ?></td>
+              <td><?php echo e($pekerjaan->tahun_ajaran); ?> - <?php echo e($pekerjaan->semester); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
               </tr>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

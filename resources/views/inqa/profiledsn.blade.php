@@ -1,9 +1,9 @@
 @extends('layout/master')
 @section('title', 'Profile Dosen')
-@section('home', 'active')
+@section('dosen', 'active')
 @section('content')
 <div class="container float-left mb-5">
-  <a class=" container " href="/"> < Kembali</a>
+  <a class=" container " href="/inqa/list_dosen"> < Kembali</a>
 </div>
 <div class="">
   <div class="panel-profile col-md-4">
@@ -54,19 +54,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Kelas</b></h3>
     <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
   </div>
 
   <div class="panel-body">
@@ -81,13 +68,14 @@
           <th>SKS</th>
           <th>TAHUN AJARAN</th>
           <th>JUMLAH DOSEN</th>
+          <th>VERIFIKASI</th>
           <th>BKD</th>
           <th>BKD INQA</th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkd = 0; $sumBkdInqa = 0;@endphp
-          @foreach($dosen->kelas as $kelas)
+          @foreach($dosen->kelas->sortBy('sifat')->sortByDesc('verifikasi') as $kelas)
           @php $sumBkd += $kelas->bkd(); $sumBkdInqa += $kelas->bkdinq();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
@@ -97,6 +85,7 @@
               <td>{{ $kelas->sks}}</td>
               <td>{{ $kelas->tahun_ajaran}} - {{$kelas->semester}}</td>
               <td>{{ $kelas->jumlah_dosen}}</td>
+              <td>{{ $kelas->pivot->verifikasi}}</td>
               <td>{{ number_format($kelas->bkd(), 2)}}</td>
               <td>{{ number_format($kelas->bkdinq(), 2)}}</td>
               </tr>
@@ -111,19 +100,6 @@
   <div class="panel-heading">
     <h3 class="panel-title"><b>Daftar Pekerjaan</b></h3>
     <hr>
-    @if (count($errors) > 0)
-      <div class="alert alert-danger">
-          <ul>
-              @foreach ($errors->all() as $error)
-                  <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-      </div>
-    @elseif (session('status'))
-      <div class="text-center alert alert-success">
-        {{ session('status') }}
-      </div> 
-    @endif  
   </div>
 
   <div class="panel-body">
@@ -131,22 +107,22 @@
       <table class="table" id="dtBasicExamples">
         <thead>
         <tr>
-        <th>NOMOR </th>
-            <th>JENIS PEKERJAAN</TH>
-            <th>BKD</th>
-            <th>TAHUN AJARAN</th>
-            <th>KETERANGAN</th>
+          <th>NOMOR </th>
+          <th>JENIS PEKERJAAN</TH>
+          <th>BKD</th>
+          <th>TAHUN AJARAN</th>
+          <th>KETERANGAN</th>
         </tr>
         </thead>
         <tbody>
         @php $sumBkdNp = 0;@endphp
-          @foreach($dosen->pekerjaan as $pekerjaan)
+          @foreach($dosen->pekerjaan->sortByDesc('verifikasi') as $pekerjaan)
           @php $sumBkdNp += $pekerjaan->bkdnp();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
               <td>{{ $pekerjaan->jenis_pekerjaan}}</th>
               <td>{{ $pekerjaan->bkdnp()}}</td>
-              <td>{{ $pekerjaan->tahun_ajaran}}</td>
+              <td>{{ $pekerjaan->tahun_ajaran}} - {{ $pekerjaan->semester}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
               </tr>
           @endforeach

@@ -83,13 +83,55 @@ class DashboardController extends Controller
             return back()->with('error', 'Kelas Sudah Terdaftar!');
         }
         if($req->kelas_sifat == 'Team Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,]);                          
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40 ){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (1.5 * $req->kelas_sks) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Group Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,]);
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Tatap Muka'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Praktikum'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Kelas Lab'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Asistensi'){
             $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
             'bkd_kelas' => ($req->kelas_jmlmhs * 0.5),]);                          
@@ -168,13 +210,55 @@ class DashboardController extends Controller
             return back()->with('error', 'Kelas Sudah Terdaftar!');
         }
         if($req->kelas_sifat == 'Team Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,]);                          
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40 ){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (1.5 * $req->kelas_sks) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Group Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,]);
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Tatap Muka'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Praktikum'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Kelas Lab'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Asistensi'){
             $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
             'bkd_kelas' => ($req->kelas_jmlmhs * 0.5),]);                          
@@ -273,19 +357,58 @@ class DashboardController extends Controller
             return back()->with('error', 'Kelas Sudah Terdaftar!');
         }
         if($req->kelas_sifat == 'Team Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,
-            'verifikasi' => 'Ya']);                          
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40 ){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (1.5 * $req->kelas_sks) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => (($req->kelas_jmlmhs/40) * (1.5 * $req->kelas_sks)) / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Group Teaching'){
-            $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,
-            'verifikasi' => 'Ya']);
-            return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks / $req->kelas_jmldsn,]);
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Tatap Muka'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Praktikum'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => $req->kelas_sks / $req->kelas_jmldsn,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * $req->kelas_sks,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
+        }elseif($req->kelas_sifat == 'Kelas Lab'){
+            if($req->kelas_jmlmhs <= 40){
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }else{
+                $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
+                'bkd_kelas' => ($req->kelas_jmlmhs / 40) * 3.5,]);                          
+                return back()->with('status', 'Kelas Berhasil Terdaftar!');
+            }
         }elseif($req->kelas_sifat == 'Asistensi'){
             $dosen->kelas()->attach($req->kelas, ['bkd_inqa' => $req->kelas_sks / $req->kelas_jmldsn, 
-            'bkd_kelas' => ($req->kelas_jmlmhs * 0.5),
-            'verifikasi' => 'Ya']);                          
+            'bkd_kelas' => ($req->kelas_jmlmhs * 0.5),]);                          
             return back()->with('status', 'Kelas Berhasil Terdaftar!');
         }
     }
