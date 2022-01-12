@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Dosen extends Model
 {
     protected $table="dosen";
-    protected $fillable = ["nik, nama, alamat, no_telp, prodi"];
+    protected $fillable = ["nik, user_id, nama, alamat, no_telp, prodi"];
     public $timestamps = false;
     
     public function user(){

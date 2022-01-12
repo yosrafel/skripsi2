@@ -27,8 +27,8 @@
               <tr>
               <td>{{ $dosen->nik}}</th>
               <td>{{ $dosen->nama}}</th>
-              <td>{{ $dosen->pekerjaan->sum('sks')}}</th>
-              <td>{{ $dosen->kelas()->sum('bkd_kelas')}}</th>
+              <td>{{ $dosen->pekerjaan->sum('sks')}} / {{ $dosen->pekerjaan->count()}} Pekerjaan</td>
+              <td>{{ $dosen->kelas()->sum('bkd_kelas')}} / {{ $dosen->kelas()->count()}} Kelas</td>
               <td>{{ $dosen->kelas()->sum('bkd_inqa')}}</th>
               <td>
                 <a href="/inqa/{{$dosen->id}}/profiledsn" class="badge">DETAIL</a>

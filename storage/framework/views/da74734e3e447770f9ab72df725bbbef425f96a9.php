@@ -40,7 +40,7 @@
           <?php $sumBkd += $kelas->kelas->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-              <td><?php echo e($kelas->kelas->matakuliah->nama); ?></th>
+              <td><?php echo e($kelas->kelas->nama_matkul); ?></th>
               <td><?php echo e($kelas->kelas->grup); ?></td>
               <td><?php echo e($kelas->dosen->nama); ?></th>
               <td><?php echo e($kelas->kelas->sks); ?></td>

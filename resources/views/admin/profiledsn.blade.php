@@ -67,7 +67,7 @@
 
   <div class="container">
     <div class="pull-left">
-      <a class="btn btn-success"  data-toggle="modal" data-target="#createKelasModal">BUAT DAFTAR KELAS</a>
+      <a class="btn btn-success"  data-toggle="modal" data-target="#createKelasModal">TAMBAH KELAS</a>
     </div>
   </div>
 
@@ -83,6 +83,7 @@
           <th>SKS</th>
           <th>TAHUN AJARAN</th>
           <th>BKD</th>
+          <th>VERIFIKASI</th>
           <th>ACTION </th>
         </tr>
         </thead>
@@ -92,12 +93,13 @@
           @php $sumBkd += $kelas->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $kelas->matakuliah->nama}}</th>
+              <td>{{ $kelas->nama_matkul}}</th>
               <td>{{ $kelas->grup}}</td>
               <td>{{ $kelas->sifat}}</td>
               <td>{{ $kelas->sks}}</td>
               <td>{{ $kelas->tahun_ajaran}} - {{$kelas->semester}}</td>
               <td>{{ number_format($kelas->bkd(), 2)}}</td>
+              <td>{{ $kelas->pivot->verifikasi}}</td>
               <td>
                   <a href="/admin/{{$dosen->id}}/{{$kelas->id}}/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
@@ -131,6 +133,7 @@
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
             <th>BKD</th>
+            <th>VERIFIKASI</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -144,6 +147,7 @@
               <td>{{ $pekerjaan->tahun_ajaran}} - {{ $pekerjaan->semester}}</td>
               <td>{{ $pekerjaan->keterangan}}</td>
               <td>{{ $pekerjaan->sks}}</td>
+              <td>{{ $pekerjaan->verifikasi}}</td>
               <td>
                   <a href="/admin/{{$pekerjaan->id}}/dtl_pekerjaan" class="badge">EDIT</a>
                   <a href="/admin/{{$pekerjaan->id}}/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -156,13 +160,30 @@
   </div>
 </div>
 
-<div class="panel panel-headline col-md-12">
-  <div class="panel-heading col-md-6">
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
     <ul class="list-unstyled list-justify">
       @php $totalBkd = $sumBkd + $sumBkdNp; @endphp
-      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($sumBkdNp, 2)}}</span> </li>
-      <li>Jumlah Beban Pengajaran<span>{{number_format($sumBkd, 2)}}</span></li>
-      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($totalBkd, 2)}}</span></li>
+      <li><b>BKD YANG SUDAH DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($jmlPkj, 2)}}</span> </li><br>
+      <li>Jumlah Beban Pengajaran<span>{{$jmlKls}}</span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($jml, 2)}}</span></li><br>
+      <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-2">
+</div>
+
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
+    <ul class="list-unstyled list-justify">
+      @php $totalBkd = $sumBkd + $sumBkdNp; @endphp
+      <li><b>BKD YANG BELUM & TIDAK DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($jmlPkj2, 2)}}</span> </li><br>
+      <li>Jumlah Beban Pengajaran<span>{{$jmlKls2}}</span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($jml2, 2)}}</span></li><br>
       <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
     </ul>
   </div>
@@ -186,7 +207,7 @@
                 <select name="kelas" class="form-control" id="kelas">
                   <option> Silahkan Pilih </option>
                   @foreach($kelas2 as $kelas2)
-                  <option value="{{$kelas2->id}}" data-price="{{$kelas2->sks}}" data-price2="{{$kelas2->jumlah_dosen}}" data-price3="{{$kelas2->sifat}}" data-price4="{{$kelas2->jumlah_mhs}}"> {{$kelas2->matakuliah->nama}} - Grup {{$kelas2->grup}} - {{$kelas2->sifat}}</option>
+                  <option value="{{$kelas2->id}}" data-price="{{$kelas2->sks}}" data-price2="{{$kelas2->jumlah_dosen}}" data-price3="{{$kelas2->sifat}}" data-price4="{{$kelas2->jumlah_mhs}}"> {{$kelas2->nama_matkul}} - Grup {{$kelas2->grup}} - {{$kelas2->sifat}}</option>
                   @endforeach
                 </select>
             </div>
@@ -243,7 +264,7 @@
             </div>
             <div class="form-group">
               <label for="sks">Besar SKS</label>
-              <input name="sks" type="text" class="form-control" id="sks" placeholder="Besar SKS" required value="{{ old('sks') }}">
+              <input name="sks" type="text" class="form-control" id="sks" placeholder="Besar SKS" value="{{ old('sks') }}">
             </div>
             <div class="form-group">
               <label for="tahun_ajaran">Tahun Ajaran</label>
@@ -301,7 +322,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
+        data: [{{number_format($jmlPkj, 2)}}, {{number_format($jmlKls, 2)}}]
     }]
 });
 

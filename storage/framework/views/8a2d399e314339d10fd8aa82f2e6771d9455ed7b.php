@@ -37,7 +37,6 @@
                         <li>NIK <span><?php echo e(auth()->user()->dosen->nik); ?></span></li>
                         <li>Alamat <span><?php echo e(auth()->user()->dosen->alamat); ?></span></li>
                         <li>Nomor Telepon <span><?php echo e(auth()->user()->dosen->no_telp); ?></span></li>
-                        <li>Program Studi <span><?php echo e(auth()->user()->dosen->prodi); ?></span></li>
                         <li>Email <span><?php echo e(auth()->user()->email); ?></span></li>
                     </ul>
                 </div>
@@ -65,7 +64,7 @@
 
   <div class="container">
     <div class="pull-left">
-      <a class="btn btn-success"  data-toggle="modal" data-target="#createKelasModal">BUAT DAFTAR KELAS</a>
+      <a class="btn btn-success"  data-toggle="modal" data-target="#createKelasModal">TAMBAH KELAS</a>
     </div>
   </div>
 
@@ -80,8 +79,8 @@
             <th>SIFAT</th>
             <th>SKS</th>
             <th>TAHUN AJARAN</th>
-            <th>VERIFIKASI</th>
             <th>BKD</th>
+            <th>VERIFIKASI</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -91,13 +90,13 @@
               <?php $sumBkd += $kls->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-              <td><?php echo e($kls->matakuliah->nama); ?></th>
+              <td><?php echo e($kls->nama_matkul); ?></th>
               <td><?php echo e($kls->grup); ?></td>
               <td><?php echo e($kls->sifat); ?></td>
               <td><?php echo e($kls->sks); ?></td>
               <td><?php echo e($kls->tahun_ajaran); ?> - <?php echo e($kls->semester); ?></td>
-              <td><?php echo e($kls->pivot->verifikasi); ?></td>
               <td><?php echo e(number_format($kls->bkd(), 2)); ?></td>
+              <td><?php echo e($kls->pivot->verifikasi); ?></td>
               <td>
                   <a href="/dosen/<?php echo e($profil->id); ?>/<?php echo e($kls->id); ?>/del_kelas" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
               </td>
@@ -130,8 +129,8 @@
             <th>JENIS PEKERJAAN</TH>
             <th>TAHUN AJARAN</th>
             <th>KETERANGAN</th>
-            <th>VERIFIKASI</th>
             <th>BKD</th>
+            <th>VERIFIKASI</th>
             <th>ACTION </th>
         </tr>
         </thead>
@@ -144,8 +143,8 @@
               <td><?php echo e($pekerjaan->jenis_pekerjaan); ?></th>
               <td><?php echo e($pekerjaan->tahun_ajaran); ?> - <?php echo e($pekerjaan->semester); ?></td>
               <td><?php echo e($pekerjaan->keterangan); ?></td>
-              <td><?php echo e($pekerjaan->verifikasi); ?></td>
               <td><?php echo e($pekerjaan->bkdnp()); ?></td>
+              <td><?php echo e($pekerjaan->verifikasi); ?></td>
               <td>
                   <a href="/dosen/<?php echo e($pekerjaan->id); ?>/detail_pekerjaan" class="badge">EDIT</a>
                   <a href="/dosen/<?php echo e($pekerjaan->id); ?>/delete_pekerjaan" class="badge badge-danger" onclick="return confirm('Yakin Ingin Menghapus?')">DELETE</a>
@@ -158,13 +157,30 @@
   </div>
 </div>
 
-<div class="panel panel-headline col-md-12">
-  <div class="panel-heading col-md-6">
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
     <ul class="list-unstyled list-justify">
       <?php $totalBkd = $sumBkd + $sumBkdNp; ?>
-      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($sumBkdNp, 2)); ?></span> </li>
-      <li>Jumlah Beban Pengajaran<span><?php echo e(number_format($sumBkd, 2)); ?></span></li>
-      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($totalBkd, 2)); ?></span></li>
+      <li><b>BKD YANG SUDAH DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($jmlPkj, 2)); ?></span> </li><br>
+      <li>Jumlah Beban Pengajaran<span><?php echo e($jmlKls); ?></span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($jml, 2)); ?></span></li><br>
+      <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-2">
+</div>
+
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
+    <ul class="list-unstyled list-justify">
+      <?php $totalBkd = $sumBkd + $sumBkdNp; ?>
+      <li><b>BKD YANG BELUM & TIDAK DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($jmlPkj2, 2)); ?></span> </li><br>
+      <li>Jumlah Beban Pengajaran<span><?php echo e($jmlKls2); ?></span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($jml2, 2)); ?></span></li><br>
       <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
     </ul>
   </div>
@@ -235,8 +251,8 @@
                 <label for="kelas">Matakuliah</label>
                 <select name="kelas" class="form-control" id="kelas">
                   <option> Silahkan Pilih</option>
-                  <?php $__currentLoopData = $kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($kelas->id); ?>" data-price="<?php echo e($kelas->sks); ?>" data-price2="<?php echo e($kelas->jumlah_dosen); ?>" data-price3="<?php echo e($kelas->sifat); ?>" data-price4="<?php echo e($kelas->jumlah_mhs); ?>"> <?php echo e($kelas->matakuliah->nama); ?> - Grup <?php echo e($kelas->grup); ?> - <?php echo e($kelas->sifat); ?></option>
+                  <?php $__currentLoopData = $kelas2; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas2): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($kelas2->id); ?>" data-price="<?php echo e($kelas2->sks); ?>" data-price2="<?php echo e($kelas2->jumlah_dosen); ?>" data-price3="<?php echo e($kelas2->sifat); ?>" data-price4="<?php echo e($kelas2->jumlah_mhs); ?>"> <?php echo e($kelas2->nama_matkul); ?> - Grup <?php echo e($kelas2->grup); ?> - <?php echo e($kelas2->sifat); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>             
             </div>
@@ -294,7 +310,7 @@
             </div>
             <div class="form-group">
               <label for="sks">Besar SKS</label>
-              <input name="sks" type="text" class="form-control" id="sks" placeholder="Besar SKS" required value="<?php echo e(old('sks')); ?>">
+              <input name="sks" type="text" class="form-control" id="sks" placeholder="Besar SKS" value="<?php echo e(old('sks')); ?>">
             </div>
             <div class="form-group">
               <label for="tahun_ajaran">Tahun Ajaran</label>
@@ -351,7 +367,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
+        data: [<?php echo e(number_format($jmlPkj, 2)); ?>, <?php echo e(number_format($jmlKls, 2)); ?>]
     }]
 });
 

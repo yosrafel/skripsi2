@@ -38,7 +38,7 @@
           @php $sumBkd += $kelas->kelas->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $kelas->kelas->matakuliah->nama}}</th>
+              <td>{{ $kelas->kelas->nama_matkul}}</th>
               <td>{{ $kelas->kelas->grup}}</td>
               <td>{{ $kelas->dosen->nama}}</th>
               <td>{{ $kelas->kelas->sks}}</td>

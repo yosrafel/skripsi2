@@ -22,13 +22,13 @@
           </tr>
         </thead>
         <tbody>
-          <?php $__currentLoopData = $dosen->where('id', '!=' , auth()->user()->dosen->id); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dosen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+          <?php $__currentLoopData = $dosen; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dosen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></td>
               <td><?php echo e($dosen->nik); ?></td>
               <td><?php echo e($dosen->nama); ?></td>
-              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?></td>
-              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?></td>
+              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?> / <?php echo e($dosen->kelas()->count()); ?> Kelas</td>
+              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?> / <?php echo e($dosen->pekerjaan->count()); ?> Pekerjaan</td>
               <td>
                 <a href="/kaprodi/<?php echo e($dosen->id); ?>/profiledsn" class="badge">DETAIL</a>
               </td>

@@ -59,6 +59,7 @@
 						<?php elseif(auth()->user()->role == 'admin'): ?>
 						<li><a href="/" class="<?php echo $__env->yieldContent('home'); ?>"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/admin/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
+						<li><a href="/admin/list_kelas" class="<?php echo $__env->yieldContent('kelas'); ?>"><i class="lnr lnr-code"></i> <span>Kelas</span></a></li>
 						<?php elseif(auth()->user()->role == 'inqa'): ?>
 						<li><a href="/" class="<?php echo $__env->yieldContent('home'); ?>"><i class="lnr lnr-home"></i> <span>Home</span></a></li>
 						<li><a href="/inqa/list_dosen" class="<?php echo $__env->yieldContent('dosen'); ?>"><i class="lnr lnr-code"></i> <span>Dosen</span></a></li>
@@ -120,10 +121,8 @@ $(document).ready(function() {
 } );
 </script>
 <script>
-$(document).ready(function() {
-    $('#dtBasicExamples').DataTable( {
-        "dom": '<"toolbar">frt'
-    } );
+	$(document).ready( function () {
+	$('#dtBasicExamples').DataTable();
 } );
 </script>
 

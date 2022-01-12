@@ -89,7 +89,7 @@
           <?php $sumBkd += $kelas->kelas->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-              <td><?php echo e($kelas->kelas->matakuliah->nama); ?></th>
+              <td><?php echo e($kelas->kelas->nama_matkul); ?></th>
               <td><?php echo e($kelas->kelas->grup); ?></td>
               <td><?php echo e($kelas->kelas->sifat); ?></td>
               <td><?php echo e($kelas->kelas->sks); ?></td>
@@ -149,13 +149,30 @@
   </div>
 </div>
 
-<div class="panel panel-headline col-md-12">
-  <div class="panel-heading col-md-6">
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
     <ul class="list-unstyled list-justify">
       <?php $totalBkd = $sumBkd + $sumBkdNp; ?>
-      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($sumBkdNp, 2)); ?></span> </li>
-      <li>Jumlah Beban Pengajaran<span><?php echo e(number_format($sumBkd, 2)); ?></span></li>
-      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($totalBkd, 2)); ?></span></li>
+      <li><b>BKD YANG SUDAH DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($jmlPkj, 2)); ?></span> </li><br>
+      <li>Jumlah Beban Pengajaran<span><?php echo e($jmlKls); ?></span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($jml, 2)); ?></span></li><br>
+      <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-2">
+</div>
+
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
+    <ul class="list-unstyled list-justify">
+      <?php $totalBkd = $sumBkd + $sumBkdNp; ?>
+      <li><b>BKD YANG BELUM & TIDAK DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span><?php echo e(number_format($jmlPkj2, 2)); ?></span> </li><br>
+      <li>Jumlah Beban Pengajaran<span><?php echo e($jmlKls2); ?></span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span><?php echo e(number_format($jml2, 2)); ?></span></li><br>
       <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
     </ul>
   </div>
@@ -198,7 +215,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [<?php echo e(number_format($sumBkdNp, 2)); ?>, <?php echo e(number_format($sumBkd, 2)); ?>]
+        data: [<?php echo e(number_format($jmlPkj, 2)); ?>, <?php echo e(number_format($jmlKls, 2)); ?>]
     }]
 });
 

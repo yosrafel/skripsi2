@@ -79,7 +79,7 @@
           @php $sumBkd += $kelas->bkd(); $sumBkdInqa += $kelas->bkdinq();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $kelas->matakuliah->nama}}</th>
+              <td>{{ $kelas->nama_matkul}}</th>
               <td>{{ $kelas->grup}}</td>
               <td>{{ $kelas->sifat}}</td>
               <td>{{ $kelas->sks}}</td>
@@ -132,14 +132,30 @@
   </div>
 </div>
 
-<div class="panel panel-headline col-md-12">
-  <div class="panel-heading col-md-6">
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
     <ul class="list-unstyled list-justify">
       @php $totalBkd = $sumBkd + $sumBkdNp; @endphp
-      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($sumBkdNp, 2)}}</span> </li>
-      <li>Jumlah Beban Pengajaran<span>{{number_format($sumBkd, 2)}}</span></li>
-      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($totalBkd, 2)}}</span></li><br>
-      <li>Jumlah Beban Pengajaran (INQA)<span>{{number_format($sumBkdInqa, 2)}}</span></li>
+      <li><b>BKD YANG SUDAH DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($jmlPkj, 2)}}</span> </li><br>
+      <li>Jumlah Beban Pengajaran<span>{{$jmlKls}}</span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($jml, 2)}}</span></li><br>
+      <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
+    </ul>
+  </div>
+</div>
+
+<div class="col-md-2">
+</div>
+
+<div class="panel panel-headline col-md-5">
+  <div class="panel-heading col-md-12">
+    <ul class="list-unstyled list-justify">
+      @php $totalBkd = $sumBkd + $sumBkdNp; @endphp
+      <li><b>BKD YANG BELUM & TIDAK DISETUJUI</b></li>
+      <li>Jumlah Beban Non-Pengajaran<span>{{number_format($jmlPkj2, 2)}}</span> </li><br>
+      <li>Jumlah Beban Pengajaran<span>{{$jmlKls2}}</span></li><br>
+      <li>Total Beban Pengjaran & Non-Pengajaran<span>{{number_format($jml2, 2)}}</span></li><br>
       <!-- <li>Jumlah kelebihan Beban Pengajaran<span>28,34</span></li> -->
     </ul>
   </div>
@@ -182,7 +198,7 @@ Highcharts.chart('chartBkd', {
     },
     series: [{
         name: 'Beban Kerja',
-        data: [{{number_format($sumBkdNp, 2)}}, {{number_format($sumBkd, 2)}}]
+        data: [{{number_format($jmlPkj, 2)}}, {{number_format($jmlKls, 2)}}]
     }]
 });
 </script>

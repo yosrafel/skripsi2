@@ -22,13 +22,13 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($dosen->where('id', '!=' , auth()->user()->dosen->id) as $dosen)
+          @foreach($dosen as $dosen)
             <tr>
               <th scope="row">{{ $loop->iteration }}</td>
               <td>{{ $dosen->nik}}</td>
               <td>{{ $dosen->nama}}</td>
-              <td>{{ $dosen->kelas()->sum('bkd_kelas')}}</td>
-              <td>{{ $dosen->pekerjaan->sum('sks')}}</td>
+              <td>{{ $dosen->kelas()->sum('bkd_kelas')}} / {{ $dosen->kelas()->count()}} Kelas</td>
+              <td>{{ $dosen->pekerjaan->sum('sks')}} / {{ $dosen->pekerjaan->count()}} Pekerjaan</td>
               <td>
                 <a href="/kaprodi/{{$dosen->id}}/profiledsn" class="badge">DETAIL</a>
               </td>

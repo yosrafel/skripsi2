@@ -90,7 +90,7 @@
               @php $sumBkd += $kls->bkd();@endphp
               <tr>
               <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $kls->matakuliah->nama}}</th>
+              <td>{{ $kls->nama_matkul}}</th>
               <td>{{ $kls->grup}}</td>
               <td>{{ $kls->sifat}}</td>
               <td>{{ $kls->sks}}</td>
@@ -233,7 +233,7 @@
                 <select name="kelas" class="form-control" id="kelas">
                   <option> Silahkan Pilih</option>
                   @foreach($kelas as $kelas)
-                    <option value="{{$kelas->id}}" data-price="{{$kelas->sks}}" data-price2="{{$kelas->jumlah_dosen}}" data-price3="{{$kelas->sifat}}" data-price4="{{$kelas->jumlah_mhs}}"> {{$kelas->matakuliah->nama}} - Grup {{$kelas->grup}} - {{$kelas->sifat}}</option>
+                    <option value="{{$kelas->id}}" data-price="{{$kelas->sks}}" data-price2="{{$kelas->jumlah_dosen}}" data-price3="{{$kelas->sifat}}" data-price4="{{$kelas->jumlah_mhs}}"> {{$kelas->nama_matkul}} - Grup {{$kelas->grup}} - {{$kelas->sifat}}</option>
                   @endforeach
                 </select>             
             </div>

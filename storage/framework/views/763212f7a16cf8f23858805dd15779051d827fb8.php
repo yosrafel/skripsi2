@@ -27,8 +27,8 @@
               <tr>
               <td><?php echo e($dosen->nik); ?></th>
               <td><?php echo e($dosen->nama); ?></th>
-              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?></th>
-              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?></th>
+              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?> / <?php echo e($dosen->pekerjaan->count()); ?> Pekerjaan</td>
+              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?> / <?php echo e($dosen->kelas()->count()); ?> Kelas</td>
               <td><?php echo e($dosen->kelas()->sum('bkd_inqa')); ?></th>
               <td>
                 <a href="/inqa/<?php echo e($dosen->id); ?>/profiledsn" class="badge">DETAIL</a>

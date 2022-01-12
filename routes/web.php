@@ -24,6 +24,10 @@ Route::group(['middleware' => ['auth', 'checkRole:admin,inqa,kaprodi,dosen']], f
 
 Route::group(['middleware' => ['auth', 'checkRole:admin']], function()
 {    
+    Route::get('/admin/list_kelas','DashboardController@listklsAdm');
+    Route::get('/admin/{id}/dtl_kelas','DashboardController@dtlklsAdm');
+    Route::post('/admin/import_kelas_excel', 'DashboardController@importKelasExcel');
+
     Route::get('/admin/list_dosen','DashboardController@listdsnAdm');
     Route::get('/admin/{id}/profiledsn','DashboardController@profiledsnAdm');
 

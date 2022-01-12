@@ -18,6 +18,7 @@
             <th>NAMA</TH>
             <th>BKD PENGAJARAN</th>
             <th>BKD NON-PENGAJARAN </th>
+            <th>BKD NON-PENGAJARAN </th>
             <th></th>
           </tr>
         </thead>
@@ -27,8 +28,8 @@
               <th scope="row"><?php echo e($loop->iteration); ?></td>
               <td><?php echo e($dosen->nik); ?></td>
               <td><?php echo e($dosen->nama); ?></td>
-              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?></td>
-              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?></td>
+              <td><?php echo e($dosen->kelas()->sum('bkd_kelas')); ?> / <?php echo e($dosen->kelas()->count()); ?> Kelas</td>
+              <td><?php echo e($dosen->pekerjaan->sum('sks')); ?> / <?php echo e($dosen->pekerjaan->count()); ?> Pekerjaan</td>
               <td>
                 <a href="/admin/<?php echo e($dosen->id); ?>/profiledsn" class="badge">DETAIL</a>
               </td>

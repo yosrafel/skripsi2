@@ -92,7 +92,7 @@
               <?php $sumBkd += $kls->bkd();?>
               <tr>
               <th scope="row"><?php echo e($loop->iteration); ?></th>
-              <td><?php echo e($kls->matakuliah->nama); ?></th>
+              <td><?php echo e($kls->nama_matkul); ?></th>
               <td><?php echo e($kls->grup); ?></td>
               <td><?php echo e($kls->sifat); ?></td>
               <td><?php echo e($kls->sks); ?></td>
@@ -238,7 +238,7 @@
                 <select name="kelas" class="form-control" id="kelas">
                   <option> Silahkan Pilih</option>
                   <?php $__currentLoopData = $kelas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $kelas): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <option value="<?php echo e($kelas->id); ?>" data-price="<?php echo e($kelas->sks); ?>" data-price2="<?php echo e($kelas->jumlah_dosen); ?>" data-price3="<?php echo e($kelas->sifat); ?>" data-price4="<?php echo e($kelas->jumlah_mhs); ?>"> <?php echo e($kelas->matakuliah->nama); ?> - Grup <?php echo e($kelas->grup); ?> - <?php echo e($kelas->sifat); ?></option>
+                    <option value="<?php echo e($kelas->id); ?>" data-price="<?php echo e($kelas->sks); ?>" data-price2="<?php echo e($kelas->jumlah_dosen); ?>" data-price3="<?php echo e($kelas->sifat); ?>" data-price4="<?php echo e($kelas->jumlah_mhs); ?>"> <?php echo e($kelas->nama_matkul); ?> - Grup <?php echo e($kelas->grup); ?> - <?php echo e($kelas->sifat); ?></option>
                   <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>             
             </div>
